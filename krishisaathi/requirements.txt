@@ -1,0 +1,17 @@
+streamlit==1.32.0
+groq==0.4.2
+speechrecognition==3.10.1
+pyaudio==0.2.14
+requests==2.31.0
+pandas==2.2.0
+numpy==1.26.3
+Pillow==10.2.0
+torch==2.2.0
+torchvision==0.17.0
+transformers==4.38.0
+langchain==0.1.5
+langchain-community==0.0.21
+chromadb==0.4.22
+sentence-transformers==2.3.1
+python-dotenv==1.0.0
+plotly==5.19.0

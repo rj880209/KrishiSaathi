@@ -1,0 +1,102 @@
+{
+  "soil_health": {
+    "questions": [
+      {
+        "id": "SH001",
+        "question": "What is a Soil Health Card?",
+        "answer": "Soil Health Card is a printed report given to farmers containing status of soil fertility and other associated parameters that determine crop productivity.",
+        "source": "Ministry of Agriculture & Farmers Welfare",
+        "tags": ["soil", "basics", "SHC"]
+      },
+      {
+        "id": "SH002",
+        "question": "How to interpret NPK values in Soil Health Card?",
+        "answer": "NPK stands for Nitrogen (N), Phosphorus (P), and Potassium (K). Low values indicate deficiency requiring fertilizer application. Optimal ranges: N (200-250 kg/ha), P (20-30 kg/ha), K (40-60 kg/ha) for most crops.",
+        "source": "ICAR Guidelines",
+        "tags": ["NPK", "fertilizer", "interpretation"]
+      },
+      {
+        "id": "SH003",
+        "question": "What does pH value indicate?",
+        "answer": "pH indicates soil acidity or alkalinity. Ideal pH for most crops is 6.5-7.5. Below 6.5 is acidic (add lime), above 7.5 is alkaline (add gypsum or organic matter).",
+        "source": "ICAR Guidelines",
+        "tags": ["pH", "soil", "treatment"]
+      }
+    ]
+  },
+  "msp_enam": {
+    "questions": [
+      {
+        "id": "MSP001",
+        "question": "What is MSP for wheat in 2024?",
+        "answer": "Minimum Support Price for wheat for 2024-25 is ₹2,275 per quintal.",
+        "source": "Government of India Announcement",
+        "tags": ["MSP", "wheat", "price"]
+      },
+      {
+        "id": "MSP002",
+        "question": "What is MSP for paddy/rice?",
+        "answer": "Minimum Support Price for paddy (common variety) is ₹2,183 per quintal and for Grade A paddy is ₹2,203 per quintal for 2024-25.",
+        "source": "Government of India Announcement",
+        "tags": ["MSP", "rice", "paddy", "price"]
+      },
+      {
+        "id": "MSP003",
+        "question": "How to sell on e-NAM?",
+        "answer": "Register at enam.gov.in, link your APMC mandi account, get quality assaying done, and participate in online bidding. Payment is directly transferred to your bank account.",
+        "source": "e-NAM Guidelines",
+        "tags": ["e-NAM", "selling", "registration"]
+      }
+    ]
+  },
+  "pmfby": {
+    "questions": [
+      {
+        "id": "PM001",
+        "question": "What is PMFBY?",
+        "answer": "Pradhan Mantri Fasal Bima Yojana is a crop insurance scheme providing financial support to farmers suffering crop loss/damage due to unforeseen events like natural calamities, pests & diseases.",
+        "source": "PMFBY Guidelines",
+        "tags": ["insurance", "PMFBY", "basics"]
+      },
+      {
+        "id": "PM002",
+        "question": "What is the premium rate under PMFBY?",
+        "answer": "Farmers pay: 2% premium for Kharif food & oilseed crops, 1.5% for Rabi food & oilseed crops, and 5% for commercial/horticultural crops. Government subsidizes the rest.",
+        "source": "PMFBY Guidelines",
+        "tags": ["premium", "PMFBY", "rate"]
+      },
+      {
+        "id": "PM003",
+        "question": "How to file a claim under PMFBY?",
+        "answer": "Report crop damage to local agriculture department/patwari within 72 hours of occurrence. Provide land records, Aadhaar, and bank details. Claim amount is settled after crop cutting experiments.",
+        "source": "PMFBY Guidelines",
+        "tags": ["claim", "PMFBY", "process"]
+      }
+    ]
+  },
+  "pest_remedies": {
+    "questions": [
+      {
+        "id": "PR001",
+        "question": "How to control wheat rust?",
+        "answer": "For leaf/stripe rust: Spray Propiconazole 25% EC @ 0.1% or Tebuconazole 25.9% EC @ 0.1%. Remove and burn infected plant debris. Use resistant varieties like HD-3086, HD-3226.",
+        "source": "ICAR-IIWBR Recommendations",
+        "tags": ["wheat", "rust", "fungicide", "pest"]
+      },
+      {
+        "id": "PR002",
+        "question": "How to control pest in cotton?",
+        "answer": "For bollworm: Install pheromone traps (4-5/acre), spray Bt formulation or Emamectin Benzoate 5% SG @ 0.4g/liter. For aphids: Spray Imidacloprid 17.8% SL @ 0.3ml/liter.",
+        "source": "ICAR-CICR Recommendations",
+        "tags": ["cotton", "bollworm", "aphids", "pest"]
+      },
+      {
+        "id": "PR003",
+        "question": "How to manage blight in potato?",
+        "answer": "For late blight: Spray Mancozeb 75% WP @ 2.5g/liter or Metalaxyl 8% + Mancozeb 64% WP @ 2.5g/liter. Ensure proper drainage and avoid overhead irrigation.",
+        "source": "ICAR-CPRI Recommendations",
+        "tags": ["potato", "blight", "fungicide", "disease"]
+      }
+    ]
+  }
+}
