@@ -21,12 +21,11 @@ except ImportError:
 
 load_dotenv()
 
-# Configure logging
+# Configure logging - Console only (no disk logging)
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('logs/audit_log.log'),
         logging.StreamHandler()
     ]
 )
@@ -185,7 +184,7 @@ In production, I would provide:
         return None
     
     def _log_interaction(self, query: str, response: str, confidence: float, context: str):
-        """Log interaction for audit and training purposes"""
+        """Log interaction for audit and training purposes (console only)"""
         log_entry = {
             'timestamp': datetime.now().isoformat(),
             'query': query,
@@ -195,13 +194,8 @@ In production, I would provide:
             'model': self.model
         }
         
-        # Append to audit log
-        log_file = 'logs/chat_audit.jsonl'
-        os.makedirs('logs', exist_ok=True)
-        with open(log_file, 'a', encoding='utf-8') as f:
-            f.write(json.dumps(log_entry, ensure_ascii=False) + '\n')
-        
-        logger.info(f"Logged interaction with confidence: {confidence:.2f}")
+        # Log to console only (no disk writing)
+        logger.info(f"AUDIT: {json.dumps(log_entry, ensure_ascii=False)}")
     
     def reset_conversation(self):
         """Reset conversation history"""
@@ -210,7 +204,7 @@ In production, I would provide:
     
     def get_feedback(self, message_id: str, feedback: str):
         """
-        Record user feedback for model improvement
+        Record user feedback for model improvement (console only)
         
         Args:
             message_id: Unique identifier for the message
@@ -222,11 +216,8 @@ In production, I would provide:
             'feedback': feedback
         }
         
-        feedback_file = 'logs/feedback.jsonl'
-        with open(feedback_file, 'a', encoding='utf-8') as f:
-            f.write(json.dumps(feedback_log, ensure_ascii=False) + '\n')
-        
-        logger.info(f"Recorded feedback: {feedback} for message {message_id}")
+        # Log to console only (no disk writing)
+        logger.info(f"FEEDBACK: {json.dumps(feedback_log, ensure_ascii=False)}")
 
 
 class HumanEscalationHandler:
@@ -237,7 +228,7 @@ class HumanEscalationHandler:
     
     def escalate(self, user_query: str, ai_response: str, confidence: float, 
                   user_contact: str = ""):
-        """Add query to human expert queue"""
+        """Add query to human expert queue (console logging only)"""
         escalation = {
             'timestamp': datetime.now().isoformat(),
             'user_query': user_query,
@@ -249,11 +240,6 @@ class HumanEscalationHandler:
         
         self.expert_queue.append(escalation)
         
-        # Log escalation
-        log_file = 'logs/escalations.jsonl'
-        os.makedirs('logs', exist_ok=True)
-        with open(log_file, 'a', encoding='utf-8') as f:
-            f.write(json.dumps(escalation, ensure_ascii=False) + '\n')
-        
-        logger.warning(f"Escalated query to human expert (confidence: {confidence:.2f})")
+        # Log to console only (no disk writing)
+        logger.warning(f"ESCALATION: {json.dumps(escalation, ensure_ascii=False)}")
         return len(self.expert_queue)  # Return queue position
