@@ -142,33 +142,55 @@ Use the following test cases to verify all features of KrishiSaathi.
 | Language | Test Phrase (Speak/Type) | Expected Intent |
 | :--- | :--- | :--- |
 | **Hindi** | "गेहूं के पत्ते पीले पड़ रहे हैं" | Pest/Disease Detection (Wheat) |
-| **Telugu** | "వరి ధర ఎంత?" | MSP/Market Price Query |
+| **Hindi** | "मैं अपनी मिट्टी की जांच कैसे करूं?" | Soil Health Card Query |
+| **Hindi** | "गेहूं का एमएसपी क्या है?" | MSP Price Query |
+| **Telugu** | "వరి ధర ఎంత?" (Rice price?) | MSP/Market Price Query |
+| **Telugu** | "నా పంట ఆరోగ్యం ఎలా తనిఖీ చేసుకోవాలి?" | Crop Health Check |
 | **Marathi** | "कापूस विमा कसा काढावा?" | PMFBY Insurance Query |
+| **Marathi** | "माझ्या पिकाची तब्येत कशी तपासावी?" | Crop Health Check |
 | **Bengali** | "মাটির স্বাস্থ্য কার্ড কীভাবে পাব?" | Soil Health Card Query |
+| **Bengali** | "ধানের ব্লাস্ট রোগ কীভাবে চিহ্নিত করব?" | Rice Blast Disease |
 | **Tamil** | "நெல் பயிர் நோய் தீர்வு" | Pest Remedy Query |
+| **Tamil** | "என் பயிரின் ஆரோக்கியத்தை எப்படி சரிபார்க்கலாம்?" | Crop Health Check |
 
 ### 3. 💬 Pre-defined Q&A (RAG System)
 *Type these exact queries to test knowledge base retrieval.*
 
 #### A. Soil Health Card
 - "What does NPK stand for in my soil card?"
+- "How to interpret NPK values in Soil Health Card?"
 - "My soil has low Nitrogen, what fertilizer should I use?"
+- "What is a Soil Health Card?"
 - "How to interpret EC value in Soil Health Card?"
+- "What does pH value indicate?"
+- "Ideal pH for crops"
 
 #### B. MSP & e-NAM Prices
 - "What is the current MSP for Wheat?"
+- "What is MSP for wheat in 2024?"
+- "What is MSP for paddy/rice?"
 - "Show me onion prices in Nashik e-NAM market."
+- "How to sell on e-NAM?"
 - "Is there a bonus for organic farming under MSP?"
 
 #### C. PMFBY Insurance
+- "What is PMFBY?"
 - "How to claim insurance for crop loss due to hail?"
+- "How to file a claim under PMFBY?"
 - "What is the premium rate for Kharif crops?"
+- "What is the premium rate under PMFBY?"
 - "Last date for PMFBY enrollment?"
 
 #### D. Pest Remedies (ICAR Approved)
 - "Remedy for Brown Spot in Rice."
 - "How to control Aphids in Mustard?"
 - "Organic pesticide for Tomato blight."
+- "How to control wheat rust?"
+- "How to control pest in cotton?"
+- "How to manage blight in potato?"
+- "गेहूं की फसल में पत्ते पीले क्यों हो रहे हैं?" (Hindi: Why are wheat leaves turning yellow?)
+- "wheat yellow leaves treatment"
+- "cotton bollworm remedy"
 
 ### 4. 🖼️ Image Diagnosis (Pest/Disease)
 *Upload sample images to test the classifier.*
@@ -179,6 +201,8 @@ Use the following test cases to verify all features of KrishiSaathi.
 | **Wheat** | Rust (Orange powdery spores) | Immediate fungicide alert + Variety resistance info |
 | **Rice** | Blast (Diamond shaped lesions) | Water management advice + Tricyclazole suggestion |
 | **Cotton** | Bollworm (Holes in bolls) | Bt-cotton info + Pheromone trap suggestion |
+| **Potato** | Late Blight (Water-soaked lesions) | Mancozeb spray + Drainage improvement |
+| **Healthy** | Any healthy crop image | "No issues detected" message |
 
 *(Note: In Demo Mode without model weights, this returns simulated diagnosis)*
 
@@ -190,22 +214,40 @@ Use the following test cases to verify all features of KrishiSaathi.
 | **Low Confidence** | "What is the best stock to buy today?" (Out of domain) | Confidence <85% → Trigger "Talk to Agent" button |
 | **Ambiguous** | "It is not working." | Clarification question OR Route to Agent |
 | **High Risk** | "Can I eat this pesticide?" | Immediate Warning + Human Expert Escalation |
+| **Out of Scope** | "How to fix my car engine?" | Route to human expert with escalation message |
+| **Vague Query** | "My plant is sick" | Request for more details or image upload |
 
 ### 6. 🔄 Context-Aware Follow-ups
 *Test multi-turn conversation memory.*
 
-1. **User:** "Tell me about Wheat Rust."
-   - *System:* Explains Wheat Rust.
+**Scenario 1: Wheat Disease**
+1. **User:** "Tell me about Wheat Rust." / "गेहूं में रस्ट रोग"
+   - *System:* Explains Wheat Rust with treatment.
 2. **User:** "What are the chemical options?"
-   - *System:* Should understand context is still **Wheat Rust** and list fungicides.
+   - *System:* Should understand context is still **Wheat Rust** and list fungicides (Propiconazole, Tebuconazole).
 3. **User:** "Is it available in my block?"
    - *System:* Should ask for location/block details to check availability.
+
+**Scenario 2: MSP Query**
+1. **User:** "What is MSP for rice?"
+   - *System:* Provides MSP rates for paddy.
+2. **User:** "When is the best time to sell?"
+   - *System:* Should provide mandi timing/market advice.
+3. **User:** "How to register on e-NAM?"
+   - *System:* Provides registration steps.
+
+**Scenario 3: Soil Health**
+1. **User:** "My soil test shows low nitrogen"
+   - *System:* Recommends nitrogen fertilizers.
+2. **User:** "How much urea should I apply?"
+   - *System:* Provides dosage based on crop type.
 
 ### 7. 📝 Feedback Loop
 | Action | Expected Result |
 | :--- | :--- |
-| Click 👍 | "Thank you!" toast, positive log entry in `logs/feedback.json` |
-| Click 👎 | "Sorry! Improving..." toast, negative log entry for retraining |
+| Click 👍 on good response | "Thank you!" toast, positive log entry in console |
+| Click 👎 on poor response | "Sorry! Improving..." toast, negative log entry for retraining |
+| Skip feedback | No action, conversation continues |
 
 ### 8. 📡 Advanced Features (UI Mockups)
 | Feature | Test Action | Expected UI Response |
@@ -214,14 +256,29 @@ Use the following test cases to verify all features of KrishiSaathi.
 | **Market Coach** | Select "Onion" | Price trend graph + "Hold/Sell" recommendation |
 | **FPO Chat** | Type in Group Chat | Message broadcast simulation |
 | **Credit Pre-qual** | Click "Check Eligibility" | Mock credit score display based on AA framework |
+| **Offline Cache** | Enter District + Click Download | Success message, FAQs cached for offline use |
+| **Soil Health Card** | Enter SHC number + Fetch | Mock NPK data displayed with recommendations |
 
 ---
 
 ## 🚀 Running Tests
 1. **Start App:** `streamlit run app.py`
-2. **Configure:** Enter Groq API Key in sidebar.
-3. **Execute:** Go through sections 1-8 above.
-4. **Verify Logs:** Check `logs/audit.log` and `logs/feedback.json` for recorded interactions.
+2. **Configure:** Enter Groq API Key in sidebar (optional for demo mode).
+3. **Execute:** Go through sections 1-8 above systematically.
+4. **Verify Console Logs:** Watch for RAG retrieval messages, confidence scores, and audit logs in console output.
+5. **Test Edge Cases:** Try misspelled queries, mixed language inputs, and very short/long questions.
+
+### Quick Smoke Test Commands
+```bash
+# Test RAG retrieval directly
+python -c "from utils.rag_engine import KnowledgeRetriever; r = KnowledgeRetriever('data/knowledge_base.json'); print(r.retrieve('wheat rust', top_k=2))"
+
+# Test chat engine in demo mode
+python -c "from utils.chat_engine import AIChatEngine; c = AIChatEngine(); print(c.chat('What is MSP for wheat?', context='MSP is 2275'))"
+
+# Verify knowledge base loading
+python -c "import json; kb = json.load(open('data/knowledge_base.json')); print(f'Loaded {sum(len(v[\"questions\"]) for v in kb.values())} Q&A pairs')"
+```
 
 ---
 

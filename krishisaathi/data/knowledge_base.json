@@ -81,7 +81,7 @@
         "question": "How to control wheat rust?",
         "answer": "For leaf/stripe rust: Spray Propiconazole 25% EC @ 0.1% or Tebuconazole 25.9% EC @ 0.1%. Remove and burn infected plant debris. Use resistant varieties like HD-3086, HD-3226.",
         "source": "ICAR-IIWBR Recommendations",
-        "tags": ["wheat", "rust", "fungicide", "pest"]
+        "tags": ["wheat", "rust", "fungicide", "pest", "yellow", "leaves", "पत्ते", "पीले"]
       },
       {
         "id": "PR002",
@@ -96,6 +96,13 @@
         "answer": "For late blight: Spray Mancozeb 75% WP @ 2.5g/liter or Metalaxyl 8% + Mancozeb 64% WP @ 2.5g/liter. Ensure proper drainage and avoid overhead irrigation.",
         "source": "ICAR-CPRI Recommendations",
         "tags": ["potato", "blight", "fungicide", "disease"]
+      },
+      {
+        "id": "PR004",
+        "question": "गेहूं की फसल में पत्ते पीले क्यों हो रहे हैं?",
+        "answer": "गेहूं के पत्ते पीले होने के कारण: नाइट्रोजन की कमी, लोहे की कमी, या रस्ट रोग। समाधान: यूरिया छिड़काव करें, आयरन युक्त उर्वरक डालें, या प्रोपिकोनাজोल 25% EC @ 0.1% का छिड़काव करें।",
+        "source": "ICAR-IIWBR Recommendations",
+        "tags": ["wheat", "yellow leaves", "गेहूं", "पीले पत्ते", "nutrient deficiency", "rust"]
       }
     ]
   }
