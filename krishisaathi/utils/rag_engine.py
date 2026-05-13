@@ -85,16 +85,34 @@ class KnowledgeRetriever:
             
             return results
         
-        # Fallback: keyword-based retrieval
+        # Fallback: keyword-based retrieval with improved matching
         else:
             query_lower = query.lower()
             scores = []
             
-            for i, text in enumerate(self.texts):
-                # Simple keyword overlap score
-                query_words = set(query_lower.split())
-                doc_words = set(text.split())
+            # Extract key terms from query
+            query_words = set(query_lower.split())
+            # Remove common stop words
+            stop_words = {'what', 'is', 'the', 'for', 'how', 'to', 'in', 'my', 'a', 'an', 'and', 'or'}
+            query_words = query_words - stop_words
+            
+            for i, doc in enumerate(self.documents):
+                # Match against question and tags
+                text_to_match = f"{doc['question']} {doc['answer']} {' '.join(doc['tags'])}".lower()
+                doc_words = set(text_to_match.split())
+                
+                # Calculate overlap score
                 overlap = len(query_words & doc_words) / max(len(query_words), 1)
+                
+                # Boost score if exact phrase match
+                if doc['question'].lower() in query_lower or query_lower in doc['question'].lower():
+                    overlap += 0.5
+                
+                # Boost score if tags match
+                for tag in doc['tags']:
+                    if tag.lower() in query_lower:
+                        overlap += 0.2
+                
                 scores.append((i, overlap))
             
             # Sort by score descending
@@ -103,7 +121,7 @@ class KnowledgeRetriever:
             results = []
             for idx, score in scores[:top_k]:
                 if score > 0.1:  # Minimum threshold
-                    results.append((self.documents[idx], float(score)))
+                    results.append((self.documents[idx], float(min(score, 1.0))))
             
             return results
     
@@ -123,7 +141,9 @@ class KnowledgeRetriever:
                 f"Confidence: {score:.2f}"
             )
         
-        return "\n\n---\n\n".join(context_parts)
+        result_text = "\n\n---\n\n".join(context_parts)
+        print(f"[RAG Context] Retrieved {len(results)} results for query: '{query}'")
+        return result_text
 
 
 class OfflineCache:

@@ -10,13 +10,7 @@ from datetime import datetime
 from PIL import Image
 import tempfile
 
-# Import custom modules
-from utils.rag_engine import KnowledgeRetriever, OfflineCache
-from utils.chat_engine import AIChatEngine, HumanEscalationHandler
-from utils.voice_processor import VoiceProcessor, LANGUAGE_NAMES, Language
-from utils.image_classifier import PestDiseaseClassifier
-
-# Page configuration
+# Page configuration - must be first
 st.set_page_config(
     page_title="KrishiSaathi - AI Agricultural Assistant",
     page_icon="🌾",
@@ -47,11 +41,55 @@ st.markdown("""
         color: #D32F2F;
         font-weight: bold;
     }
-    .feedback-btn {
-        margin: 0.2rem;
-    }
 </style>
 """, unsafe_allow_html=True)
+
+
+@st.cache_resource
+def load_retriever():
+    """Load RAG retriever (cached)"""
+    from utils.rag_engine import KnowledgeRetriever
+    return KnowledgeRetriever("data/knowledge_base.json")
+
+
+@st.cache_resource
+def load_voice_processor():
+    """Load voice processor (cached)"""
+    from utils.voice_processor import VoiceProcessor
+    return VoiceProcessor(groq_client=None)
+
+
+@st.cache_resource
+def load_classifier():
+    """Load image classifier (cached)"""
+    from utils.image_classifier import PestDiseaseClassifier
+    return PestDiseaseClassifier()
+
+
+@st.cache_resource
+def load_escalation_handler():
+    """Load escalation handler (cached)"""
+    from utils.chat_engine import HumanEscalationHandler
+    return HumanEscalationHandler()
+
+
+@st.cache_resource
+def load_offline_cache():
+    """Load offline cache (cached)"""
+    from utils.rag_engine import OfflineCache
+    return OfflineCache()
+
+
+def get_chat_engine(api_key):
+    """Get chat engine (not cached - depends on API key)"""
+    if not api_key:
+        return None
+    try:
+        from utils.chat_engine import AIChatEngine
+        return AIChatEngine(api_key=api_key)
+    except Exception as e:
+        st.warning(f"⚠️ Invalid API key. Using demo mode. Error: {str(e)}")
+        return None
 
 
 def initialize_session_state():
@@ -70,48 +108,6 @@ def initialize_session_state():
         st.session_state.groq_api_key = None
     if 'api_key_submitted' not in st.session_state:
         st.session_state.api_key_submitted = False
-
-
-def load_components():
-    """Load AI components with error handling"""
-    try:
-        # Initialize RAG engine
-        retriever = KnowledgeRetriever("data/knowledge_base.json")
-        
-        # Initialize chat engine with API key from session state
-        chat_engine = None
-        if st.session_state.groq_api_key:
-            try:
-                chat_engine = AIChatEngine(api_key=st.session_state.groq_api_key)
-            except Exception as e:
-                st.warning(f"⚠️ Invalid API key. Using demo mode. Error: {str(e)}")
-        else:
-            st.info("🔑 Enter your Groq API Key in the sidebar to enable full AI features.")
-        
-        # Initialize voice processor
-        voice_processor = VoiceProcessor(groq_client=None)  # Will use fallback
-        
-        # Initialize image classifier
-        classifier = PestDiseaseClassifier()
-        
-        # Initialize escalation handler
-        escalation_handler = HumanEscalationHandler()
-        
-        # Initialize offline cache
-        offline_cache = OfflineCache()
-        
-        return {
-            'retriever': retriever,
-            'chat_engine': chat_engine,
-            'voice_processor': voice_processor,
-            'classifier': classifier,
-            'escalation_handler': escalation_handler,
-            'offline_cache': offline_cache
-        }
-        
-    except Exception as e:
-        st.error(f"Error loading components: {str(e)}")
-        return None
 
 
 def render_sidebar(components):
@@ -469,12 +465,27 @@ def main():
     """Main application"""
     initialize_session_state()
     
-    # Load components
-    components = load_components()
+    # Load components using cached loaders for speed
+    retriever = load_retriever()
+    voice_processor = load_voice_processor()
+    classifier = load_classifier()
+    escalation_handler = load_escalation_handler()
+    offline_cache = load_offline_cache()
     
-    if not components:
-        st.error("Failed to load application components. Please check configuration.")
-        return
+    # Load chat engine (depends on API key, not cached)
+    chat_engine = get_chat_engine(st.session_state.groq_api_key)
+    
+    if not chat_engine:
+        st.info("🔑 Enter your Groq API Key in the sidebar to enable full AI features. Running in Demo Mode.")
+    
+    components = {
+        'retriever': retriever,
+        'chat_engine': chat_engine,
+        'voice_processor': voice_processor,
+        'classifier': classifier,
+        'escalation_handler': escalation_handler,
+        'offline_cache': offline_cache
+    }
     
     # Render sidebar
     render_sidebar(components)
